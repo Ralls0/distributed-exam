@@ -17,13 +17,13 @@ var assignmentController = require(path.join(__dirname, 'controllers/Assignments
 var options = {
     controllers: path.join(__dirname, './controllers')
 };
-var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
+var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, '../REST APIs Design/openapi.yaml'), options);
 expressAppConfig.addValidator();
 var app = expressAppConfig.getApp();
 
 // Set validator middleware
-var taskSchema = JSON.parse(fs.readFileSync(path.join('.', 'json_schemas', 'task_schema.json')).toString());
-var userSchema = JSON.parse(fs.readFileSync(path.join('.', 'json_schemas', 'user_schema.json')).toString());
+var taskSchema = JSON.parse(fs.readFileSync(path.join('..', 'JSON Schemas', 'task_schema.json')).toString());
+var userSchema = JSON.parse(fs.readFileSync(path.join('..', 'JSON Schemas', 'user_schema.json')).toString());
 var validator = new Validator({ allErrors: true });
 validator.ajv.addSchema([userSchema, taskSchema]);
 var validate = validator.validate;
