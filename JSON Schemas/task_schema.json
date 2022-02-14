@@ -54,6 +54,12 @@
           "$ref": "./user_schema.json#"
       }
     },
+    "completer": {
+      "type": "array",
+      "items": {
+          "$ref": "./user_schema.json#"
+      }
+    },
     "completers": {
       "type": "integer",
       "description": "number of different users who must cooperate to complete the task",

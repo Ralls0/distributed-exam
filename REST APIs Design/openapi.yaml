@@ -518,6 +518,9 @@ paths:
         '404':
           description: Not Found
           content: {}
+        '409':
+          description: Conflict
+          content: {}
         '500':
           description: Internal Server Error
           content: {}
@@ -700,6 +703,10 @@ components:
           type: string
           format: date-time
           description: the due date and hour of the task
+        completers:
+          type: integer
+          description: number of different users who must cooperate to complete the task
+          default: 1
         completed:
           type: boolean
           description: >-
