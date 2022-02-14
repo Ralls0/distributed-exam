@@ -54,6 +54,11 @@
           "$ref": "./user_schema.json#"
       }
     },
+    "completers": {
+      "type": "integer",
+      "description": "number of different users who must cooperate to complete the task",
+      "default": 1
+    },
     "self": {
       "type": "string",
       "format": "uri-reference",

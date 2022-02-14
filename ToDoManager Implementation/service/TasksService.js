@@ -82,7 +82,7 @@ exports.deleteTask = function(taskId, owner) {
 exports.getPublicTasks = function(req) {
     return new Promise((resolve, reject) => {
 
-        var sql = "SELECT t.id as tid, t.description, t.important, t.private, t.project, t.deadline,t.completed,c.total_rows FROM tasks t, (SELECT count(*) total_rows FROM tasks l WHERE l.private=0) c WHERE  t.private = 0 "
+        var sql = "SELECT t.id as tid, t.description, t.important, t.private, t.project, t.deadline, t.completed, c.total_rows FROM tasks t, (SELECT count(*) total_rows FROM tasks l WHERE l.private=0) c WHERE  t.private = 0 "
         var limits = getPagination(req);
         if (limits.length != 0) sql = sql + " LIMIT ?,?";
         db.all(sql, limits, (err, rows) => {
