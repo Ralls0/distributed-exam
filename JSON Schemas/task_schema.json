@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id" : "http://www.my-schema.com/task_schema.json",
+  "$id": "http://www.my-schema.com/task_schema.json",
   "title": "Task",
   "description": "JSON Schema for Task objects",
   "type": "object",
@@ -32,7 +32,12 @@
     "project": {
       "type": "string",
       "description": "project in which the task is inserted",
-      "enum": ["Personal", "WA1_Project", "WA2_Project", "DSP_Project"]
+      "enum": [
+        "Personal",
+        "WA1_Project",
+        "WA2_Project",
+        "DSP_Project"
+      ]
     },
     "deadline": {
       "type": "string",
@@ -45,19 +50,27 @@
       "description": "this property is set to true if the task is marked as completed, false otherwise (default value: false)",
       "default": "false"
     },
-    "owner":{
+    "owner": {
       "$ref": "./user_schema.json#"
     },
     "assignees": {
       "type": "array",
       "items": {
-          "$ref": "./user_schema.json#"
+        "$ref": "./user_schema.json#"
       }
     },
     "completer": {
       "type": "array",
+      "description": "the different users who have completed the task",
       "items": {
-          "$ref": "./user_schema.json#"
+        "$ref": "./user_schema.json#"
+      }
+    },
+    "active": {
+      "type": "array",
+      "description": "the different users who are cooperating to the task",
+      "items": {
+        "$ref": "./user_schema.json#"
       }
     },
     "completers": {
@@ -71,5 +84,7 @@
       "description": "self link"
     }
   },
-  "required": ["description"]
+  "required": [
+    "description"
+  ]
 }

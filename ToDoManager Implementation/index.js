@@ -61,6 +61,8 @@ app.put('/api/tasks/:taskId', passport.authenticate('jwt', { session: false }), 
 app.put('/api/tasks/:taskId/completion', passport.authenticate('jwt', { session: false }), taskController.completeTask);
 app.post('/api/tasks/:taskId/assignees', passport.authenticate('jwt', { session: false }), validate({ body: userSchema }), assignmentController.assignTaskToUser);
 app.get('/api/tasks/:taskId/assignees', passport.authenticate('jwt', { session: false }), assignmentController.getUsersAssigned);
+app.get('/api/tasks/:taskId/active', passport.authenticate('jwt', { session: false }), assignmentController.getUsersActive);
+app.get('/api/tasks/:taskId/completers', passport.authenticate('jwt', { session: false }), assignmentController.getUsersComplited);
 app.delete('/api/tasks/:taskId/assignees/:userId', passport.authenticate('jwt', { session: false }), assignmentController.removeUser);
 app.post('/api/tasks/assignments', passport.authenticate('jwt', { session: false }), assignmentController.assignAutomatically);
 app.get('/api/users', passport.authenticate('jwt', { session: false }), userController.getUsers);
@@ -68,6 +70,7 @@ app.get('/api/users/:userId', passport.authenticate('jwt', { session: false }), 
 app.get('/api/users/:userId/tasks/created', passport.authenticate('jwt', { session: false }), taskController.getOwnedTasks);
 app.get('/api/users/:userId/tasks/assigned', passport.authenticate('jwt', { session: false }), taskController.getAssignedTasks);
 app.put('/api/users/:userId/selection', passport.authenticate('jwt', { session: false }), assignmentController.selectTask);
+// TODO: app.put('/api/users/:userId/selection'.. per sapere su quale task sta lavorando
 
 // Error handlers for validation and authentication errors
 
