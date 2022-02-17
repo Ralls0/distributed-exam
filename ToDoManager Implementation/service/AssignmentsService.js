@@ -157,6 +157,10 @@ exports.getUsersComplited = function (taskId, owner) {
  * - owner : ID of user who wants to remove the assignee
  * Output:
  * - no response expected for this operation
+ * NOTE:
+ * In case the user has already completed the task the operation cannot be done.
+ * In case the user is working on the task, so the task is an active one, 
+ * a deselection of this is performed.
  *
  **/
 exports.removeUser = function (taskId, userId, owner) {
