@@ -300,73 +300,65 @@ exports.updateSingleTask = function (task, taskId, owner) {
       else if (owner != rows[0].owner) {
         reject(403);
       } else {
-        const sql2 = "DELETE FROM assignments WHERE task = ?";
-        db.run(sql2, [taskId], (err) => {
-          if (err) reject(err);
-          else {
-            var sql3 = "UPDATE tasks SET description = ?";
-            var parameters = [task.description];
-            if (task.important !== undefined) {
-              sql3 = sql3.concat(", important = ?");
-              parameters.push(task.important);
-            }
-            if (task.private !== undefined) {
-              sql3 = sql3.concat(", private = ?");
-              parameters.push(task.private);
-            }
-            if (task.project !== undefined) {
-              sql3 = sql3.concat(", project = ?");
-              parameters.push(task.project);
-            }
-            if (task.deadline !== undefined) {
-              sql3 = sql3.concat(", deadline = ?");
-              parameters.push(task.deadline);
-            }
-            if (task.completers !== undefined) {
-              sql3 = sql3.concat(", completers = ?");
-              parameters.push(task.completers);
-            }
-            sql3 = sql3.concat(" WHERE id = ?");
-            parameters.push(task.id);
+        var sql3 = "UPDATE tasks SET description = ?";
+        var parameters = [task.description];
+        if (task.important !== undefined) {
+          sql3 = sql3.concat(", important = ?");
+          parameters.push(task.important);
+        }
+        if (task.private !== undefined) {
+          sql3 = sql3.concat(", private = ?");
+          parameters.push(task.private);
+        }
+        if (task.project !== undefined) {
+          sql3 = sql3.concat(", project = ?");
+          parameters.push(task.project);
+        }
+        if (task.deadline !== undefined) {
+          sql3 = sql3.concat(", deadline = ?");
+          parameters.push(task.deadline);
+        }
+        if (task.completers !== undefined) {
+          sql3 = sql3.concat(", completers = ?");
+          parameters.push(task.completers);
+        }
+        sql3 = sql3.concat(" WHERE id = ?");
+        parameters.push(task.id);
 
-            db.run(sql3, parameters, function (err) {
-              if (err) {
-                reject(err);
-              } else {
-                if (task.completers !== undefined) {
-                  console.log("[i] Sono entrato nell'update")
-                  const sql4 =
-                    "SELECT count(*) as completed, t.completers, t.completed as tcompleted FROM assignments a, tasks t WHERE a.task = ? and t.id = a.task and a.completed = 1";
-                  db.all(sql4, [taskId], (err, rows4) => {
+        db.run(sql3, parameters, function (err) {
+          if (err) {
+            reject(err);
+          } else {
+            if (task.completers !== undefined) {
+              console.log("[i] Sono entrato nell'update");
+              const sql4 =
+                "SELECT count(*) as completed, t.completers, t.completed as tcompleted FROM assignments a, tasks t WHERE a.task = ? and t.id = a.task and a.completed = 1";
+              db.all(sql4, [taskId], (err, rows4) => {
+                if (err) {
+                  reject(err);
+                } else if (rows4[0].completed !== rows4[0].completers) {
+                  if (rows4[0].tcompleted === 1) {
+                    const sql5 = "UPDATE tasks SET completed = 0 WHERE id = ?";
+                    db.run(sql5, [taskId], (err) => {
+                      if (err) {
+                        reject(err);
+                      } else {
+                        resolve(null);
+                      }
+                    });
+                  } else resolve(null);
+                } else if (rows4[0].completed === rows4[0].completers) {
+                  const sql6 = "UPDATE tasks SET completed = 1 WHERE id = ?";
+                  db.run(sql6, [taskId], (err) => {
                     if (err) {
                       reject(err);
-                    } else if (rows4[0].completed !== rows4[0].completers) {
-                      if (rows4[0].tcompleted === 1) {
-                        const sql5 =
-                          "UPDATE tasks SET completed = 0 WHERE id = ?";
-                        db.run(sql5, [taskId], (err) => {
-                          if (err) {
-                            reject(err);
-                          } else {
-                            resolve(null);
-                          }
-                        });
-                      } else resolve(null);
-                    } else if (rows4[0].completed === rows4[0].completers) {
-                      const sql6 =
-                        "UPDATE tasks SET completed = 1 WHERE id = ?";
-                      db.run(sql6, [taskId], (err) => {
-                        if (err) {
-                          reject(err);
-                        } else {
-                          resolve(null);
-                        }
-                      });
-                    } else resolve(null);
+                    } else {
+                      resolve(null);
+                    }
                   });
                 } else resolve(null);
-              }
-            });
+              });
+            } else resolve(null);
           }
         });
       }
