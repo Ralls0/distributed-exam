@@ -334,6 +334,7 @@ exports.updateSingleTask = function (task, taskId, owner) {
                 reject(err);
               } else {
                 if (task.completers !== undefined) {
+                  console.log("[i] Sono entrato nell'update")
                   const sql4 =
                     "SELECT count(*) as completed, t.completers, t.completed as tcompleted FROM assignments a, tasks t WHERE a.task = ? and t.id = a.task and a.completed = 1";
                   db.all(sql4, [taskId], (err, rows4) => {
