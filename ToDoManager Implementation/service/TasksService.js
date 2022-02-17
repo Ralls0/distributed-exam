@@ -282,6 +282,14 @@ exports.getAssignedTasksTotal = function (req) {
  * Output:
  * - no response expected for this operation
  *
+ * Note:
+ * In case of completers change, two scenarios could happen:
+ * 1. The value completers decrease and the number of users who
+ *    have already completed the task is grater or equal to this new value.
+ *    So in this case the task result completed
+ * 2. The value completers increase. In this case,
+ *    the task remove the completed status.
+ *
  **/
 exports.updateSingleTask = function (task, taskId, owner) {
   return new Promise((resolve, reject) => {
@@ -325,7 +333,37 @@ exports.updateSingleTask = function (task, taskId, owner) {
               if (err) {
                 reject(err);
               } else {
-                resolve(null);
+                if (task.completers) {
+                  const sql4 =
+                    "SELECT count(*) as completed, t.completers, t.completed as tcompleted FROM assignments a, tasks t WHERE a.task = ? and t.id = a.task and a.completed = 1";
+                  db.all(sql4, [taskId], (err, rows4) => {
+                    if (err) {
+                      reject(err);
+                    } else if (rows4[0].completed !== rows4[0].completers) {
+                      if (rows4[0].tcompleted === 1) {
+                        const sql5 =
+                          "UPDATE tasks SET completed = 0 WHERE id = ?";
+                        db.run(sql5, [taskId], (err) => {
+                          if (err) {
+                            reject(err);
+                          } else {
+                            resolve(null);
+                          }
+                        });
+                      } else resolve(null);
+                    } else {
+                      const sql6 =
+                        "UPDATE tasks SET completed = 1 WHERE id = ?";
+                      db.run(sql6, [taskId], (err) => {
+                        if (err) {
+                          reject(err);
+                        } else {
+                          resolve(null);
+                        }
+                      });
+                    }
+                  });
+                } else resolve(null);
               }
             });
           }
@@ -370,7 +408,8 @@ exports.completeTask = function (taskId, assignee) {
                 db.all(sql4, [taskId], (err, rows4) => {
                   if (err) {
                     reject(err);
-                  } else if (rows4[0].completed !== rows4[0].completers) resolve(null);
+                  } else if (rows4[0].completed !== rows4[0].completers)
+                    resolve(null);
                   else {
                     const sql5 = "UPDATE tasks SET completed = 1 WHERE id = ?";
                     db.run(sql5, [taskId], (err) => {

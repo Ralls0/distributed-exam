@@ -2,41 +2,41 @@ openapi: 3.0.1
 info:
   title: Swagger ToDo Manager
   description: REST APIs for the interaction with the ToDo Manager service.
-  termsOfService: 'http://swagger.io/terms/'
+  termsOfService: "http://swagger.io/terms/"
   license:
     name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
   version: 1.0.0
 externalDocs:
   description: Find out more about Swagger
-  url: 'http://swagger.io'
+  url: "http://swagger.io"
 servers:
-  - url: 'https://todo.swagger.io/v2'
-  - url: 'http://todo.swagger.io/v2'
+  - url: "https://todo.swagger.io/v2"
+  - url: "http://todo.swagger.io/v2"
 tags:
   - name: tasks
     description: resource representing the set of all the tasks
   - name: tasks/public
     description: resource representing the set of the public tasks
-  - name: 'tasks/{taskId}'
+  - name: "tasks/{taskId}"
     description: resource representing a single task
-  - name: 'tasks/{taskId}/assignees'
+  - name: "tasks/{taskId}/assignees"
     description: >-
       resource representing the users to which the task with ID taskID is
       assigned
-  - name: 'tasks/{taskId}/active'
+  - name: "tasks/{taskId}/active"
     description: >-
       resource representing the users to which the task with ID taskID is
       active
-  - name: 'tasks/{taskId}/completers'
+  - name: "tasks/{taskId}/completers"
     description: >-
       resource representing the users to which the task with ID taskID have
       completed
-  - name: 'tasks/{taskId}/assignees/{userId}'
+  - name: "tasks/{taskId}/assignees/{userId}"
     description: >-
       resource representing one user to which the task with ID taskID is
       assigned
-  - name: 'tasks/{taskId}/completion'
+  - name: "tasks/{taskId}/completion"
     description: resource representing the completion of the the task with ID taskID
   - name: tasks/assignments
     description: resource representing the assignments of tasks to users
@@ -44,13 +44,15 @@ tags:
     description: resource representing the set of all the users
   - name: users/authenticator
     description: resource representing the authenticator
-  - name: 'users/{userId}'
+  - name: "users/{userId}"
     description: resource representing the user with ID userId
-  - name: 'users/{userId}/selection'
+  - name: "users/{userId}/selection"
     description: resource representing the task selection for the user with ID userID
-  - name: 'users/{userId}/tasks/created'
+  - name: "users/{userId}/deselection"
+    description: resource representing the task deselection for the user with ID userID
+  - name: "users/{userId}/tasks/created"
     description: resource representing the tasks created by the user with ID userId
-  - name: 'users/{userId}/tasks/assigned'
+  - name: "users/{userId}/tasks/assigned"
     description: resource representing the tasks assigned to the user with ID userId
 paths:
   /api/tasks/public:
@@ -63,13 +65,13 @@ paths:
       operationId: getPublicTasks
       parameters:
         - in: query
-          name: pageNo                        # e.g. /api/tasks/public?pageNo=2
+          name: pageNo # e.g. /api/tasks/public?pageNo=2
           required: false
           schema:
             type: integer
-          description: 'The id of the requested page (if absent, the first page is returned)'
+          description: "The id of the requested page (if absent, the first page is returned)"
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -85,13 +87,13 @@ paths:
                   tasks:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Task'
+                      $ref: "#/components/schemas/Task"
                   next:
-                    type: string              # HATEOS e.g. /api/tasks/public?pageNo=2
-        '404':
+                    type: string # HATEOS e.g. /api/tasks/public?pageNo=2
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
   /api/tasks:
@@ -108,24 +110,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: "#/components/schemas/Task"
         required: true
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Task'
-        '400':
+                  $ref: "#/components/schemas/Task"
+        "400":
           description: Bad Request
           content: {}
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
   /api/tasks/assignments:
@@ -140,7 +142,7 @@ paths:
         users of the service in a balanced manner.
       operationId: assign
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -150,23 +152,23 @@ paths:
                   id:
                     type: integer
                     format: int64
-        '400':
+        "400":
           description: Bad Request
           content: {}
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
-  '/api/tasks/{taskId}':
+  "/api/tasks/{taskId}":
     put:
       tags:
-        - 'tasks/{taskId}'
+        - "tasks/{taskId}"
       security:
         - cookieAuth: []
       summary: Update a task
-      description: The task with ID taskId is updated. This operation does not allow to mark a task as completed. This operation can be performed only by the owner.
+      description: The task with ID taskId is updated. This operation does not allow to mark a task as completed. This operation can be performed only by the owner. In case of completers change, two scenarios could happen. 1. The value completers decrease and the number of users who have already completed the task is grater or equal to this new value. So in this case the task result completed 2. The value completers increase. In this case, the task remove the completed status.
       operationId: updateSingleTask
       parameters:
         - name: taskId
@@ -181,34 +183,34 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: "#/components/schemas/Task"
         required: true
       responses:
-        '204':
+        "204":
           description: No Content
           content: {}
-        '400':
+        "400":
           description: Bad Request
           content: {}
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
     get:
       tags:
-        - 'tasks/{taskId}'
+        - "tasks/{taskId}"
       security:
         - cookieAuth: []
       summary: Retreve a task
-      description: The task with ID taskId is retrieved. This operation can be performed on the task if at least one of the following three conditions is satisfied. 1) The task is public. 2) The user who performs the operation is the task's owner. 3) The user who performs the operation is a task's assignee. 
+      description: The task with ID taskId is retrieved. This operation can be performed on the task if at least one of the following three conditions is satisfied. 1) The task is public. 2) The user who performs the operation is the task's owner. 3) The user who performs the operation is a task's assignee.
       operationId: getSingleTask
       parameters:
         - name: taskId
@@ -219,29 +221,29 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Task'
-        '401':
+                  $ref: "#/components/schemas/Task"
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
     delete:
       tags:
-        - 'tasks/{taskId}'
+        - "tasks/{taskId}"
       security:
         - cookieAuth: []
       summary: Delete a task
@@ -256,19 +258,19 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
+        "204":
           description: Successful operation - No Content
           content: {}
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
   /api/users:
@@ -283,24 +285,24 @@ paths:
         users is retrieved.
       operationId: getUsers
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
-        '401':
+                  $ref: "#/components/schemas/User"
+        "401":
           description: Unauthorized
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-  '/api/users/{userId}':
+  "/api/users/{userId}":
     get:
       tags:
-        - 'users/{userId}'
+        - "users/{userId}"
       security:
         - cookieAuth: []
       summary: Get information about a user
@@ -317,16 +319,16 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '401':
+                $ref: "#/components/schemas/User"
+        "401":
           description: Unauthorized
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
   /api/users/authenticator:
@@ -352,29 +354,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
         required: true
       responses:
-        '204':
+        "204":
           description: No Content
           headers:
             Set-Cookie:
               schema:
                 type: string
                 example: token=abcde12345; Path=/; HttpOnly
-        '400':
+        "400":
           description: Bad Request
           content: {}
-        '401':
+        "401":
           description: Unauthorized - Wrong password
           content: {}
-        '404':
+        "404":
           description: Not found - Wrong username
           content: {}
-  '/api/tasks/{taskId}/assignees':
+  "/api/tasks/{taskId}/assignees":
     post:
       tags:
-        - 'tasks/{taskId}/assignees'
+        - "tasks/{taskId}/assignees"
       security:
         - cookieAuth: []
       summary: Assign a task to a user
@@ -395,30 +397,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
         required: true
       responses:
-        '204':
+        "204":
           description: Successful operation - No Content
           content: {}
-        '400':
+        "400":
           description: Bad Request
           content: {}
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
     get:
       tags:
-        - 'tasks/{taskId}/assignees'
+        - "tasks/{taskId}/assignees"
       security:
         - cookieAuth: []
       summary: Retrieve the users a task has been assigned to
@@ -433,30 +435,30 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
-        '401':
+                  $ref: "#/components/schemas/User"
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
-  '/api/tasks/{taskId}/active':
+  "/api/tasks/{taskId}/active":
     get:
       tags:
-        - 'tasks/{taskId}/active'
+        - "tasks/{taskId}/active"
       security:
         - cookieAuth: []
       summary: Retrieve the users who are working on a task
@@ -471,30 +473,30 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
-        '401':
+                  $ref: "#/components/schemas/User"
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
-  '/api/tasks/{taskId}/completers':
+  "/api/tasks/{taskId}/completers":
     get:
       tags:
-        - 'tasks/{taskId}/completers'
+        - "tasks/{taskId}/completers"
       security:
         - cookieAuth: []
       summary: Retrieve the users a task has been completed to
@@ -509,30 +511,30 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
-        '401':
+                  $ref: "#/components/schemas/User"
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
-  '/api/tasks/{taskId}/assignees/{userId}':
+  "/api/tasks/{taskId}/assignees/{userId}":
     delete:
       tags:
-        - 'tasks/{taskId}/assignees/{userId}'
+        - "tasks/{taskId}/assignees/{userId}"
       security:
         - cookieAuth: []
       summary: Remove a user from the assigned task
@@ -556,25 +558,28 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
+        "204":
           description: Successful operation - No Content
           content: {}
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "409":
+          description: Conflict
+          content: {}
+        "500":
           description: Internal Server Error
           content: {}
-  '/api/tasks/{taskId}/completion':
+  "/api/tasks/{taskId}/completion":
     put:
       tags:
-        - 'tasks/{taskId}/completion'
+        - "tasks/{taskId}/completion"
       security:
         - cookieAuth: []
       summary: Complete a task
@@ -590,25 +595,25 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
+        "204":
           description: Successful operation - No Content
           content: {}
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '409':
+        "409":
           description: Conflict
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
-  '/api/users/{userId}/tasks/created':
+  "/api/users/{userId}/tasks/created":
     get:
       tags:
         - users/{userId}/tasks/created
@@ -633,7 +638,7 @@ paths:
             type: integer
           description: The id of the requested page (if absent, the first page is returned)
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -649,22 +654,22 @@ paths:
                   tasks:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Task'
+                      $ref: "#/components/schemas/Task"
                   next:
                     type: string
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
-  '/api/users/{userId}/tasks/assigned':
+  "/api/users/{userId}/tasks/assigned":
     get:
       tags:
         - users/{userId}/tasks/assigned
@@ -689,7 +694,7 @@ paths:
             type: integer
           description: The id of the requested page (if absent, the first page is returned)
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -705,52 +710,86 @@ paths:
                   tasks:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Task'
+                      $ref: "#/components/schemas/Task"
                   next:
                     type: string
-        '401':
+        "401":
           description: Unauthorized
           content: {}
-        '403':
+        "403":
           description: Forbidden
           content: {}
-        '404':
+        "404":
           description: Not Found
           content: {}
-        '500':
+        "500":
           description: Internal Server Error
           content: {}
-  '/api/users/{userId}/selection':
-      put:
-        tags:
-          - 'users/{userId}/selection'
-        security:
-          - cookieAuth: []
-        summary: Select a task as the active task
-        description: >-
-          The task that is included in the request body is labeled as the acrive task for the user with ID userId.
-        operationId: removeUser
-        parameters:
-          - name: userId
-            in: path
-            description: ID of the user to remove
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          '204':
-            description: Successful operation - No Content
-            content: {}
-          '403':
-            description: Forbidden
-            content: {}
-          '404':
-            description: Not Found
-            content: {}
-          '500':
-            description: Internal Server Error
-            content: {}
+  "/api/users/{userId}/selection":
+    put:
+      tags:
+        - "users/{userId}/selection"
+      security:
+        - cookieAuth: []
+      summary: Select a task as the active task
+      description: >-
+        The task that is included in the request body is labeled as the acrive task for the user with ID userId.
+      operationId: selectTask
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful operation - No Content
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "404":
+          description: Not Found
+          content: {}
+        "500":
+          description: Internal Server Error
+          content: {}
+  "/api/users/{userId}/deselection":
+    put:
+      tags:
+        - "users/{userId}/deselection"
+      security:
+        - cookieAuth: []
+      summary: Deselect a task
+      description: >-
+        The task that is included in the request body is labeled as the non-acrive task for the user with ID userId.
+      operationId: deselectTask
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful operation - No Content
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "404":
+          description: Not Found
+          content: {}
+        "409":
+          description: Conflict
+          content: {}
+        "500":
+          description: Internal Server Error
+          content: {}
 components:
   schemas:
     Task:
@@ -797,22 +836,22 @@ components:
             this property is set to true if the task is marked as completed,
             false otherwise
           default: false
-        owner: 
-          $ref: '#/components/schemas/User'
+        owner:
+          $ref: "#/components/schemas/User"
         assignees:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
         completer:
           type: array
           description: the different users who have completed the task
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
         active:
           type: array
           description: the different users who are cooperating to the task
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
         self:
           type: string
           format: uri-reference
