@@ -306,23 +306,23 @@ exports.updateSingleTask = function (task, taskId, owner) {
           else {
             var sql3 = "UPDATE tasks SET description = ?";
             var parameters = [task.description];
-            if (task.important != undefined) {
+            if (task.important !== undefined) {
               sql3 = sql3.concat(", important = ?");
               parameters.push(task.important);
             }
-            if (task.private != undefined) {
+            if (task.private !== undefined) {
               sql3 = sql3.concat(", private = ?");
               parameters.push(task.private);
             }
-            if (task.project != undefined) {
+            if (task.project !== undefined) {
               sql3 = sql3.concat(", project = ?");
               parameters.push(task.project);
             }
-            if (task.deadline != undefined) {
+            if (task.deadline !== undefined) {
               sql3 = sql3.concat(", deadline = ?");
               parameters.push(task.deadline);
             }
-            if (task.completers != undefined) {
+            if (task.completers !== undefined) {
               sql3 = sql3.concat(", completers = ?");
               parameters.push(task.completers);
             }
@@ -333,7 +333,7 @@ exports.updateSingleTask = function (task, taskId, owner) {
               if (err) {
                 reject(err);
               } else {
-                if (task.completers) {
+                if (task.completers !== undefined) {
                   const sql4 =
                     "SELECT count(*) as completed, t.completers, t.completed as tcompleted FROM assignments a, tasks t WHERE a.task = ? and t.id = a.task and a.completed = 1";
                   db.all(sql4, [taskId], (err, rows4) => {
@@ -351,7 +351,7 @@ exports.updateSingleTask = function (task, taskId, owner) {
                           }
                         });
                       } else resolve(null);
-                    } else {
+                    } else if (rows4[0].completed === rows4[0].completers) {
                       const sql6 =
                         "UPDATE tasks SET completed = 1 WHERE id = ?";
                       db.run(sql6, [taskId], (err) => {
@@ -361,7 +361,7 @@ exports.updateSingleTask = function (task, taskId, owner) {
                           resolve(null);
                         }
                       });
-                    }
+                    } else resolve(null);
                   });
                 } else resolve(null);
               }
