@@ -1,6 +1,5 @@
 "use strict";
 
-const Task = require("../components/task");
 const User = require("../components/user");
 const db = require("../components/db");
 var WSMessage = require("../components/ws_message.js");
