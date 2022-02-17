@@ -424,7 +424,9 @@ paths:
       security:
         - cookieAuth: []
       summary: Retrieve the users a task has been assigned to
-      description: The users to whom the task with ID taskId is assigned are retrieved. This operation can be performed only by the owner.
+      description: >-
+        The users to whom the task with ID taskId is assigned are retrieved. 
+        This operation can be performed only by the owner.
       operationId: getUsersAssigned
       parameters:
         - name: taskId
@@ -462,7 +464,9 @@ paths:
       security:
         - cookieAuth: []
       summary: Retrieve the users who are working on a task
-      description: The users to whom the task with ID taskId is active are retrieved. This operation can be performed only by the owner.
+      description: >- 
+        The users to whom the task with ID taskId is active are retrieved. 
+        This operation can be performed only by the owner.
       operationId: getUsersActive
       parameters:
         - name: taskId
@@ -500,7 +504,9 @@ paths:
       security:
         - cookieAuth: []
       summary: Retrieve the users a task has been completed to
-      description: The users to whom the task with ID taskId is completed are retrieved. This operation can be performed only by the owner.
+      description: >-
+        The users to whom the task with ID taskId is completed are retrieved. 
+        This operation can be performed only by the owner.
       operationId: getUsersComplited
       parameters:
         - name: taskId
@@ -539,8 +545,12 @@ paths:
         - cookieAuth: []
       summary: Remove a user from the assigned task
       description: >-
-        The user that is removed is the user, identified by userId, that was
-        assigned to the task identified by taskId. This operation can be performed only by the owner.
+        The user that is removed is the user, identified by userId, 
+        that was assigned to the task identified by taskId. 
+        This operation can be performed only by the owner. 
+        In case the user has already completed the task the operation cannot be done.
+        In case the user is working on the task, so the task is an active one, 
+        a deselection of this is performed.
       operationId: removeUser
       parameters:
         - name: taskId
@@ -584,7 +594,8 @@ paths:
         - cookieAuth: []
       summary: Complete a task
       description: >-
-        The task with ID taskId is marked as completed. This operation can only be performed by an assignee of the task.
+        The task with ID taskId is marked as completed. 
+        This operation can only be performed by an assignee of the task.
       operationId: completeTask
       parameters:
         - name: taskId
@@ -621,7 +632,8 @@ paths:
         - cookieAuth: []
       summary: Retrieve the tasks created by the user with ID userId
       description: >-
-        This operation allows an authenticated user to retrieve the tasks that she has created. A pagination mechanism is implemented to limit the size of messages.
+        This operation allows an authenticated user to retrieve the tasks that she has created. 
+        A pagination mechanism is implemented to limit the size of messages.
       operationId: getUserTasks
       parameters:
         - name: userId
@@ -677,7 +689,8 @@ paths:
         - cookieAuth: []
       summary: Retrieve the tasks assigned to the user with ID userId
       description: >-
-        This operation allows an authenticated user to retrieve the tasks that has been assigned to her. A pagination mechanism is implemented to limit the size of messages.
+        This operation allows an authenticated user to retrieve the tasks that has been assigned to her. 
+        A pagination mechanism is implemented to limit the size of messages.
       operationId: getAssignedTasks
       parameters:
         - name: userId
@@ -764,7 +777,8 @@ paths:
         - cookieAuth: []
       summary: Deselect a task
       description: >-
-        The task that is included in the request body is labeled as the non-acrive task for the user with ID userId.
+        The task that is included in the request body is labeled as 
+        the non-acrive task for the user with ID userId.
       operationId: deselectTask
       parameters:
         - name: userId
