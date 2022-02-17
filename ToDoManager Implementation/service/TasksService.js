@@ -300,8 +300,8 @@ exports.updateSingleTask = function (task, taskId, owner) {
       else if (owner != rows[0].owner) {
         reject(403);
       } else {
-        var sql3 = "UPDATE tasks SET description = ?";
-        var parameters = [task.description];
+        let sql3 = "UPDATE tasks SET description = ?";
+        let parameters = [task.description];
         if (task.important !== undefined) {
           sql3 = sql3.concat(", important = ?");
           parameters.push(task.important);
@@ -323,7 +323,7 @@ exports.updateSingleTask = function (task, taskId, owner) {
           parameters.push(task.completers);
         }
         sql3 = sql3.concat(" WHERE id = ?");
-        parameters.push(task.id);
+        parameters.push(taskId);
 
         db.run(sql3, parameters, function (err) {
           if (err) {
