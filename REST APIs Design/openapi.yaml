@@ -138,8 +138,8 @@ paths:
         - cookieAuth: []
       summary: Assign automatically the unassigned tasks in a balanced manner
       description: >-
-        The tasks, whose owner is the user who performed this request and that are not assigned to any user, are automatically assigned to the
-        users of the service in a balanced manner.
+        The tasks, whose owner is the user who performed this request and that are not assigned to any user, 
+        are automatically assigned to the users of the service in a balanced manner.
       operationId: assign
       responses:
         "200":
