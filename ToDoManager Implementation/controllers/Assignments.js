@@ -190,6 +190,7 @@ module.exports.removeUser = function removeUser(req, res, next) {
 module.exports.selectTask = function selectTask(req, res, next) {
   var userId = req.params.userId;
   var taskId = req.body.id;
+
   if (taskId == undefined) {
     utils.writeJson(
       res,
@@ -197,6 +198,18 @@ module.exports.selectTask = function selectTask(req, res, next) {
       400
     );
   }
+  if (userId !== req.user) {
+    utils.writeJson(
+      res,
+      {
+        errors: [
+          { param: "Server", msg: "The mismatch between the given userId and the userId retrieved into the session." },
+        ],
+      },
+      403
+    );
+  }
+
   Assignments.selectTask(userId, taskId)
     .then(function (response) {
       utils.writeJson(res, response, 204);
@@ -234,6 +247,7 @@ module.exports.selectTask = function selectTask(req, res, next) {
 module.exports.deselectTask = function deselectTask(req, res, next) {
   var userId = req.params.userId;
   var taskId = req.body.id;
+
   if (taskId == undefined) {
     utils.writeJson(
       res,
@@ -241,6 +255,18 @@ module.exports.deselectTask = function deselectTask(req, res, next) {
       400
     );
   }
+  if (userId !== req.user) {
+    utils.writeJson(
+      res,
+      {
+        errors: [
+          { param: "Server", msg: "The mismatch between the given userId and the userId retrieved into the session." },
+        ],
+      },
+      403
+    );
+  }
+
   Assignments.deselectTask(userId, taskId)
     .then(function (response) {
       utils.writeJson(res, response, 204);

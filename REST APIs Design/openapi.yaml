@@ -746,7 +746,10 @@ paths:
         - cookieAuth: []
       summary: Select a task as the active task
       description: >-
-        The task that is included in the request body is labeled as the acrive task for the user with ID userId.
+        The task that is included in the request body is labeled as the acrive task 
+        for the user with ID userId. 
+        An additional check is performed on the given userId 
+        and the userId retrieved from the session.
       operationId: selectTask
       parameters:
         - name: userId
@@ -756,6 +759,13 @@ paths:
           schema:
             type: integer
             format: int64
+      requestBody:
+        description: ID of the task
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
       responses:
         "204":
           description: Successful operation - No Content
@@ -779,6 +789,8 @@ paths:
       description: >-
         The task that is included in the request body is labeled as 
         the non-acrive task for the user with ID userId.
+        An additional check is performed on the given userId 
+        and the userId retrieved from the session.
       operationId: deselectTask
       parameters:
         - name: userId
@@ -788,6 +800,13 @@ paths:
           schema:
             type: integer
             format: int64
+      requestBody:
+        description: ID of the task
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
       responses:
         "204":
           description: Successful operation - No Content
