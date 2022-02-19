@@ -71,7 +71,6 @@ app.get('/api/users/:userId/tasks/created', passport.authenticate('jwt', { sessi
 app.get('/api/users/:userId/tasks/assigned', passport.authenticate('jwt', { session: false }), taskController.getAssignedTasks);
 app.put('/api/users/:userId/selection', passport.authenticate('jwt', { session: false }), assignmentController.selectTask);
 app.put('/api/users/:userId/deselection', passport.authenticate('jwt', { session: false }), assignmentController.deselectTask);
-// TODO: app.put('/api/users/:userId/selection'.. per sapere su quale task sta lavorando
 
 // Error handlers for validation and authentication errors
 
