@@ -14,7 +14,7 @@ var constants = require("../utils/constants.js");
  * - the created task
  **/
 exports.addTask = function (task, owner) {
-  task = new Task(task);
+  task = createTask(task);
   return new Promise((resolve, reject) => {
     const sql =
       "INSERT INTO tasks(description, important, private, project, deadline, completed, owner, completers) VALUES(?,?,?,?,?,?,?,?)";
