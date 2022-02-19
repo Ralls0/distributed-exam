@@ -761,10 +761,15 @@ paths:
             format: int64
       requestBody:
         description: ID of the task
+        required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Task"
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
       responses:
         "204":
           description: Successful operation - No Content
@@ -784,12 +789,14 @@ paths:
         - "users/{userId}/deselection"
       security:
         - cookieAuth: []
-      summary: Deselect a task
+      summary: Deselect an active task
       description: >-
         The task that is included in the request body is labeled as 
-        the non-acrive task for the user with ID userId.
+        the non-active task for the user with ID userId.
         An additional check is performed on the given userId 
         and the userId retrieved from the session.
+        Whether the given ID taskId is not active for the user 
+        with ID userId a 409 error has come back.
       operationId: deselectTask
       parameters:
         - name: userId
@@ -801,10 +808,15 @@ paths:
             format: int64
       requestBody:
         description: ID of the task
+        required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Task"
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
       responses:
         "204":
           description: Successful operation - No Content
