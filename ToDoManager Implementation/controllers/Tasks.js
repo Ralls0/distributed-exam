@@ -3,7 +3,6 @@
 var utils = require("../utils/writer.js");
 var constants = require("../utils/constants.js");
 var Tasks = require("../service/TasksService.js");
-// var Assignments = require('../service/AssignmentsService.js'); FIXME: DELETE ME
 
 module.exports.addTask = function addTask(req, res, next) {
   var task = req.body;
