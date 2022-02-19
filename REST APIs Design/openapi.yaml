@@ -764,8 +764,7 @@ paths:
         content:
           application/json:
             schema:
-              type: integer
-              format: int64
+              $ref: "#/components/schemas/Task"
       responses:
         "204":
           description: Successful operation - No Content
@@ -805,8 +804,7 @@ paths:
         content:
           application/json:
             schema:
-              type: integer
-              format: int64
+              $ref: "#/components/schemas/Task"
       responses:
         "204":
           description: Successful operation - No Content
