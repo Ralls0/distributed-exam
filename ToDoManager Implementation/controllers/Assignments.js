@@ -203,7 +203,7 @@ module.exports.selectTask = function selectTask(req, res, next) {
       res,
       {
         errors: [
-          { param: "Server", msg: "The mismatch between the given userId and the userId retrieved into the session." },
+          { param: "Server", msg: "The user is not characterized by the specified userId." },
         ],
       },
       403
@@ -260,7 +260,7 @@ module.exports.deselectTask = function deselectTask(req, res, next) {
       res,
       {
         errors: [
-          { param: "Server", msg: "The mismatch between the given userId and the userId retrieved into the session." },
+          { param: "Server", msg: "The user is not characterized by the specified userId." },
         ],
       },
       403

@@ -228,6 +228,60 @@ exports.getAssignedTasks = function (req) {
 };
 
 /**
+ * Retreve the tasks completed to the user
+ *
+ * Input:
+ * - req: the request of the user
+ * Output:
+ * - the list of completed tasks
+ *
+ **/
+exports.getCompletedTasks = function (req) {
+  return new Promise((resolve, reject) => {
+    var sql =
+      "SELECT t.id as tid, t.description, t.important, t.private, t.project, t.deadline, t.completers, t.completed, a.active, u.id as uid, u.name, u.email FROM tasks as t, users as u, assignments as a WHERE t.id = a.task AND a.user = u.id AND u.id = ? AND a.completed = 1";
+    var limits = getPagination(req);
+    if (limits.length != 0) sql = sql + " LIMIT ?,?";
+    limits.unshift(req.user);
+
+    db.all(sql, limits, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        let tasks = rows.map((row) => createTask(row));
+        resolve(tasks);
+      }
+    });
+  });
+};
+
+/**
+ * Retreve the active task for the user
+ *
+ * Input:
+ * - req: the request of the user
+ * Output:
+ * - the active task
+ *
+ **/
+exports.getActiveTask = function (userId) {
+  return new Promise((resolve, reject) => {
+    var sql =
+      "SELECT t.id as tid, t.description, t.important, t.private, t.project, t.deadline, t.completers, t.completed, a.active, u.id as uid, u.name, u.email FROM tasks as t, users as u, assignments as a WHERE t.id = a.task AND a.user = u.id AND u.id = ? AND a.active = 1";
+    db.all(sql, [userId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else if (rows.length === 0) {
+        reject(null);
+      } else {
+        let task = reateTask(rows[0]);
+        resolve(task);
+      }
+    });
+  });
+};
+
+/**
  * Retrieve the number of owned tasks
  *
  * Input:
@@ -263,6 +317,29 @@ exports.getAssignedTasksTotal = function (req) {
   return new Promise((resolve, reject) => {
     var sqlNumOfTasks =
       "SELECT count(*) total FROM tasks as t, users as u, assignments as a WHERE t.id = a.task AND a.user = u.id AND u.id = ?";
+    db.get(sqlNumOfTasks, req.user, (err, size) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(size.total);
+      }
+    });
+  });
+};
+
+/**
+ * Retrieve the number of completed tasks
+ *
+ * Input:
+ * - req: the request of the user
+ * Output:
+ * - total number of completed tasks
+ *
+ **/
+exports.getCompletedTasksTotal = function (req) {
+  return new Promise((resolve, reject) => {
+    var sqlNumOfTasks =
+      "SELECT count(*) total FROM tasks as t, users as u, assignments as a WHERE t.id = a.task AND a.user = u.id AND u.id = ? AND a.completed = 1";
     db.get(sqlNumOfTasks, req.user, (err, size) => {
       if (err) {
         reject(err);

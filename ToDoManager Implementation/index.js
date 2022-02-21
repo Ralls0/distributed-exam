@@ -69,6 +69,8 @@ app.get('/api/users', passport.authenticate('jwt', { session: false }), userCont
 app.get('/api/users/:userId', passport.authenticate('jwt', { session: false }), userController.getSingleUser);
 app.get('/api/users/:userId/tasks/created', passport.authenticate('jwt', { session: false }), taskController.getOwnedTasks);
 app.get('/api/users/:userId/tasks/assigned', passport.authenticate('jwt', { session: false }), taskController.getAssignedTasks);
+app.get('/api/users/:userId/tasks/completed', passport.authenticate('jwt', { session: false }), taskController.getCompletedTasks);
+app.get('/api/users/:userId/tasks/active', passport.authenticate('jwt', { session: false }), taskController.getActiveTask);
 app.put('/api/users/:userId/selection', passport.authenticate('jwt', { session: false }), assignmentController.selectTask);
 app.put('/api/users/:userId/deselection', passport.authenticate('jwt', { session: false }), assignmentController.deselectTask);
 
