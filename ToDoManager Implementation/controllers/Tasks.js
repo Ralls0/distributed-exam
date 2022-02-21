@@ -358,13 +358,21 @@ module.exports.getActiveTask = function getActiveTask(req, res, next) {
     return;
   }
 
-  Tasks.getActiveTask(req.params.userId).then((response) => {
-    if (!response) {
-      utils.writeJson(res, {});
-    } else {
-      utils.writeJson(res, response);
-    }
-  });
+  Tasks.getActiveTask(req.params.userId)
+    .then((response) => {
+      if (!response) {
+        utils.writeJson(res, {});
+      } else {
+        utils.writeJson(res, response);
+      }
+    })
+    .catch((response) => {
+      utils.writeJson(
+        res,
+        { errors: [{ param: "Server", msg: response }] },
+        500
+      );
+    });
 };
 
 module.exports.completeTask = function completeTask(req, res, next) {

@@ -16,7 +16,7 @@ passport.use(new LocalStrategy({
   function (username, password, done) {
     Users.getUserByEmail(username)
           .then((user) => {
-              if (user === undefined) {
+              if (user == undefined) {
                 return done(null, false, { message: 'Incorrect e-mail.' });
               } else {
                   if (!Users.checkPassword(user, password)) {
@@ -68,7 +68,7 @@ module.exports.authenticateUser = function authenticateUser (req, res, next) {
       const email = req.body.email;
       Users.getUserByEmail(email)
           .then((user) => {
-              if (user === undefined) {
+              if (user == undefined) {
                   utils.writeJson(res, {errors: [{ 'param': 'Server', 'msg': 'Invalid e-mail' }],}, 404);
               } else {
                 //notify all clients that a user has logged out from the service

@@ -198,7 +198,7 @@ module.exports.selectTask = function selectTask(req, res, next) {
       400
     );
   }
-  if (userId !== req.user) {
+  if (userId != req.user) {
     utils.writeJson(
       res,
       {
@@ -245,8 +245,8 @@ module.exports.selectTask = function selectTask(req, res, next) {
 };
 
 module.exports.deselectTask = function deselectTask(req, res, next) {
-  var userId = req.params.userId;
-  var taskId = req.body.id;
+  let userId = req.params.userId;
+  let taskId = req.body.id;
 
   if (taskId == undefined) {
     utils.writeJson(
@@ -255,7 +255,7 @@ module.exports.deselectTask = function deselectTask(req, res, next) {
       400
     );
   }
-  if (userId !== req.user) {
+  if (userId != req.user) {
     utils.writeJson(
       res,
       {

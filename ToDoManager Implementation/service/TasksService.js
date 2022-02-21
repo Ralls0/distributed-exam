@@ -272,9 +272,9 @@ exports.getActiveTask = function (userId) {
       if (err) {
         reject(err);
       } else if (rows.length === 0) {
-        reject(null);
+        resolve(null);
       } else {
-        let task = reateTask(rows[0]);
+        let task = createTask(rows[0]);
         resolve(task);
       }
     });
