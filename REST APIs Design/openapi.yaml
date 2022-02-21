@@ -738,6 +738,98 @@ paths:
         "500":
           description: Internal Server Error
           content: {}
+  "/api/users/{userId}/tasks/completed":
+    get:
+      tags:
+        - users/{userId}/tasks/completed
+      security:
+        - cookieAuth: []
+      summary: Retrieve the tasks completed to the user with ID userId
+      description: >-
+        This operation allows an authenticated user to retrieve the tasks that has been completed by her. 
+        A pagination mechanism is implemented to limit the size of messages.
+      operationId: getCompletedTasks
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: pageNo
+          required: false
+          schema:
+            type: integer
+          description: The id of the requested page (if absent, the first page is returned)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalPages:
+                    type: integer
+                  currentPage:
+                    type: integer
+                  totalItems:
+                    type: integer
+                  tasks:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Task"
+                  next:
+                    type: string
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "404":
+          description: Not Found
+          content: {}
+        "500":
+          description: Internal Server Error
+          content: {}
+  "/api/users/{userId}/tasks/active":
+    get:
+      tags:
+        - users/{userId}/tasks/active
+      security:
+        - cookieAuth: []
+      summary: Retrieve the active task of the user with ID userId
+      description: >-
+        This operation allows an authenticated user to retrieve the her active task.
+        In case of no active task an empty object is returned.
+      operationId: getActiveTasks
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "500":
+          description: Internal Server Error
+          content: {}
   "/api/users/{userId}/selection":
     put:
       tags:
