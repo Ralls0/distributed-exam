@@ -168,7 +168,15 @@ paths:
       security:
         - cookieAuth: []
       summary: Update a task
-      description: The task with ID taskId is updated. This operation does not allow to mark a task as completed. This operation can be performed only by the owner. In case of completers change, two scenarios could happen. 1. The value completers decrease and the number of users who have already completed the task is grater or equal to this new value. So in this case the task result completed 2. The value completers increase. In this case, the task remove the completed status.
+      description: >-
+        The task with ID taskId is updated.
+        This operation does not allow to mark a task as completed.
+        This operation does not allow to update the fields assignees, active, completer.
+        This operation can be performed only by the owner.
+        In case of completers change, two scenarios could happen.
+        The value completers decrease and the number of users who have already completed the task is grater or equal to this new value.
+        So in this case the task result completed 
+        The value completers increase. In this case, the task remove the completed status.
       operationId: updateSingleTask
       parameters:
         - name: taskId
@@ -381,8 +389,9 @@ paths:
         - cookieAuth: []
       summary: Assign a task to a user
       description: >-
-        The task with ID taskId is assigned to the user specified in the request
-        body. This operation can only be performed by the owner.
+        The task with ID taskId is assigned to the user specified in the request body. 
+        This operation can only be performed by the owner.
+        Into the requestBody ID userID and email are mandatory.
       operationId: assignTaskToUser
       parameters:
         - name: taskId
