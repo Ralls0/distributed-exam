@@ -42,8 +42,7 @@ exports.addTask = function (task, owner) {
             task.deadline,
             task.project,
             task.completers,
-            task.completed,
-            task.active
+            task.completed
           );
           resolve(createdTask);
         }

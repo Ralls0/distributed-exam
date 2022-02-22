@@ -282,7 +282,6 @@ exports.selectTask = function selectTask(userId, taskId) {
                           rows[0].description
                         )
                       );
-
                       resolve();
                     }
                   });
